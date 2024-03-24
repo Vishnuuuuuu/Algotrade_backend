@@ -1,0 +1,11 @@
+//@version=5
+indicator("Simple Sell Signal", overlay=true)
+
+// Generating a sell signal on each bar
+sellSignal = ta.barssince(close)
+
+// Plotting the sell signal on the chart
+plotshape(series=sellSignal, location=location.belowbar, color=color.red, style=shape.triangledown, size=size.small, title="Sell Signal")
+
+// Setting up an alert condition
+alertcondition(sellSignal, title="Sell Signal Alert", message="A sell signal was generated.")
