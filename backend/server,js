@@ -25,16 +25,18 @@ io.on('connection', (socket) => {
   // No need to emit a test message every 30 seconds here, unless for testing
 });
 
-// Webhook endpoint for TradingView alerts
 app.post('/webhook', (req, res) => {
-  console.log('Received webhook:', req.body);
-
-  // Assuming the body of the POST request contains the alert information
-  // Forward the alert to all connected WebSocket clients
-  io.emit('trading-signal', req.body);
-
-  res.sendStatus(200); // Respond to TradingView that the webhook was received successfully
+  try {
+    console.log('Received webhook:', req.body);
+    // Forward the alert to all connected WebSocket clients
+    io.emit('trading-signal', req.body);
+    res.sendStatus(200); // Successfully received
+  } catch (error) {
+    console.error('Error processing webhook:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-const PORT = process.env.PORT || 3001;
+
+const PORT = process.env.PORT || 443;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
